@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Meter Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Login Section -->
+    <div id="loginSection" class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
+            <div>
+                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                    Water Meter Login
+                </h2>
+                <p class="mt-2 text-center text-sm text-gray-600">
+                    Enter your credentials to access the dashboard
+                </p>
+            </div>
+            <form class="mt-8 space-y-6" id="loginForm">
+                <div class="rounded-md shadow-sm -space-y-px">
+                    <div>
+                        <label for="username" class="sr-only">Username</label>
+                        <input id="username" name="username" type="text" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Username">
+                    </div>
+                    <div>
+                        <label for="password" class="sr-only">Password</label>
+                        <input id="password" name="password" type="password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Password">
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Sign in
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard Section (Initially Hidden) -->
+    <div id="dashboardSection" class="hidden min-h-screen bg-gray-50">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <i class="fas fa-tint text-blue-500 text-2xl mr-2"></i>
+                        <span class="font-semibold text-xl">Water Meter Dashboard</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center">
+                            <label for="regionSelect" class="mr-2 text-gray-600">Region:</label>
+                            <select id="regionSelect" class="bg-white border border-gray-300 rounded-md px-3 py-1 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="bhubaneswar">Bhubaneswar</option>
+                                <option value="cuttack">Cuttack</option>
+                                <option value="puri">Puri</option>
+                            </select>
+                        </div>
+                        <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <!-- Welcome Message -->
+            <div class="px-4 py-6 sm:px-0">
+                <h1 class="text-2xl font-semibold text-gray-900">Welcome, <span id="userName">User</span>!</h1>
+                <p class="mt-1 text-gray-600">Here's your water quality metrics for today</p>
+            </div>
+
+            <!-- Metrics Grid -->
+            <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                <!-- Water Usage Card -->
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-water text-blue-500 text-3xl"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate" dt="Water Usage">
+                                        Water Usage
+                                    </dt>
+                                    <dd class="flex items-baseline">
+                                        <div class="text-2xl font-semibold text-gray-900">
+                                            -- L
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Purity Card -->
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-check-circle text-green-500 text-3xl"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate" dt="Purity">
+                                        Purity
+                                    </dt>
+                                    <dd class="flex items-baseline">
+                                        <div class="text-2xl font-semibold text-gray-900">
+                                            --%
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Iron Content Card -->
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-atom text-orange-500 text-3xl"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate" dt="Iron Content">
+                                        Iron Content
+                                    </dt>
+                                    <dd class="flex items-baseline">
+                                        <div class="text-2xl font-semibold text-gray-900">
+                                            --%
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calcium Content Card -->
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-flask text-purple-500 text-3xl"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate" dt="Calcium Content">
+                                        Calcium Content
+                                    </dt>
+                                    <dd class="flex items-baseline">
+                                        <div class="text-2xl font-semibold text-gray-900">
+                                            --%
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sulphur Content Card -->
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-burn text-yellow-500 text-3xl"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate" dt="Sulphur Content">
+                                        Sulphur Content
+                                    </dt>
+                                    <dd class="flex items-baseline">
+                                        <div class="text-2xl font-semibold text-gray-900">
+                                            --%
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- pH Level Card -->
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="p-5">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-vial text-blue-500 text-3xl"></i>
+                            </div>
+                            <div class="ml-5 w-0 flex-1">
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 truncate" dt="pH Level">
+                                        pH Level
+                                    </dt>
+                                    <dd class="flex items-baseline">
+                                        <div class="text-2xl font-semibold text-gray-900">
+                                            --
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Water Usage Graph -->
+            <div class="mt-8 bg-white overflow-hidden shadow rounded-lg p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Water Usage Trend</h2>
+                <div class="h-80">
+                    <canvas id="waterUsageChart"></canvas>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
